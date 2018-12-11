@@ -135,8 +135,8 @@ impl RustTrending {
                 fetch_repos()
                     .map(iter_ok)
                     .flatten_stream()
-                    .and_then(move |r| storage.is_repo_already_tweeted(&r).map(|b| (r, b)))
-                    .filter(|(_, is_repo_already_tweeted)| !is_repo_already_tweeted)
+                    .and_then(move |r| storage.is_repo_already_posted(&r).map(|b| (r, b)))
+                    .filter(|(_, is_repo_already_posted)| !is_repo_already_posted)
                     .map(|(r, _)| r)
                     .filter(move |r| {
                         let blacklist = blacklist.clone();
@@ -153,7 +153,7 @@ impl RustTrending {
                 let r2 = r.clone();
 
                 post_repo(&r, &webhook_url)
-                    .and_then(move |ts| storage.mark_repo_as_tweeted(&r1, ts).map(move |_| ts))
+                    .and_then(move |ts| storage.mark_repo_as_posted(&r1, ts).map(move |_| ts))
                     .map(move |ts| {
                         println!("{}, posted {} - {}", ts, r2.author, r2.name);
                     })

@@ -24,13 +24,13 @@ impl Storage {
         })
     }
 
-    pub fn mark_repo_as_tweeted(
+    pub fn mark_repo_as_posted(
         &self,
         repo: &Repo,
         timestamp: DateTime<Utc>,
     ) -> impl Future<Item = (), Error = Error> {
         let repo_name = repo.name.clone();
-        let tweet_ttl = self.config.post_ttl;
+        let post_ttl = self.config.post_ttl;
         let ts = timestamp.timestamp();
         self.client
             .get_async_connection()
@@ -46,7 +46,7 @@ impl Storage {
                             Either::A(
                                 redis::cmd("EXPIRE")
                                     .arg(repo_name2)
-                                    .arg(tweet_ttl)
+                                    .arg(post_ttl)
                                     .query_async::<_, usize>(con)
                                     .map(|_| ()),
                             )
@@ -59,7 +59,7 @@ impl Storage {
             .map_err(|e| e.context("storage error").into())
     }
 
-    pub fn is_repo_already_tweeted(&self, repo: &Repo) -> impl Future<Item = bool, Error = Error> {
+    pub fn is_repo_already_posted(&self, repo: &Repo) -> impl Future<Item = bool, Error = Error> {
         let repo_name = repo.name.clone();
         self.client
             .get_async_connection()
