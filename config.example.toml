@@ -2,7 +2,7 @@ redis_url = "redis://redis:6379"
 post_ttl = 1209600
 fetch_interval = 1800
 tweet_interval = 300
-webhook_url = "https://discordapp.com/api/webhooks/WEBHOOL_ID/WEBHOOK_TOKEN"
+webhook_url = "https://discordapp.com/api/webhooks/WEBHOOK_ID/WEBHOOK_TOKEN"
 
 [blacklist]
 names = []
